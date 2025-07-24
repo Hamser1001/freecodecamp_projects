@@ -21,6 +21,7 @@ class Category:
 
     def withdraw(self, amount, description=""):
         try:
+            amount = float(amount)
             if self.check_funds(amount):
                 self.ledger.append(
                     {"amount": -float(amount), "description": description}
@@ -36,6 +37,17 @@ class Category:
         for i in self.ledger:
             balance += i["amount"]
         return balance
+
+    def transfer(self, amount, category):
+        try:
+            amount = float(amount)
+            if self.check_funds(amount):
+                self.withdraw(amount, f"Transfer to {category.name}")
+            else:
+                return False
+        except ValueError:
+            return False
+
 
 
 def create_spend_chart(categories):
