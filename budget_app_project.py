@@ -49,54 +49,55 @@ class Category:
             amnt = f"{item['amount']:>7.2f}"
             text += f"{desc:<23}{amnt}\n"
         total = float(self.get_balance())
-        text += f"Total: {total}"
+        text += f"Total: {total:.2f}"
         return text
 
 
 def create_spend_chart(categories):
-    category_data = []
-    total_spend = 0
+    spendings = []
     for category in categories:
-        deposit = category.ledger[0]["amount"]
-        balance = category.get_balance()
-        spending = deposit - balance
-        total_spend += spending
-        # print(f"Deposit: {deposit}, Balance: {balance}, Spending {spending}")
-        category_data.append({"name": category.name, "spending": round(spending)})
-    # print(f"Total Spending {total_spend}")
-
-    # for category in category_data:
-    #     # pass
-    #     print(f"Percentage is {round((category['spending'] / total_spend) * 100)}")
-
-    for i in range(100, -1, -10):
-        print(f"{i:>3}|", end="")
-        for category in category_data:
-            percentage = (category["spending"] / total_spend) * 100
-            print(" ", end="")
-            if i > percentage:
-                print("  ", end="")
-            elif i <= percentage:
-                print("o", end=" ")
-        print()
-
-    # print(category_data)
-    print("    -", "-" * len(categories) * 3, sep="")
-
-    names = [category["name"] for category in category_data]
-    max_len = max(len(name) for name in names)
-    padded_names = [name.ljust(max_len) for name in names]
-
-    for i in range(max_len):
-        line_letters = []
-        for idx, name in enumerate(padded_names):
-            letter = name[i]
-            if idx == 0:
-                # Add 5 spaces before the first word's letter
-                line_letters.append(" " * 5 + letter)
+        spent = 0
+        for item in category.ledger:
+            if item["amount"] < 0:
+                spent += abs(item["amount"])
+        spendings.append(spent)
+    
+    total_spent = sum(spendings)
+    
+    percentages = []
+    for spending in spendings:
+        if total_spent == 0:
+            percent = 0
+        else:
+            percent = spending / total_spent * 100
+            percent = (percent // 10) * 10  
+        percentages.append(percent)
+    
+    chart = "Percentage spent by category\n"
+    for i in range(100, -10, -10):
+        chart += f"{i:3}| "
+        for percent in percentages:
+            if percent >= i:
+                chart += "o  "
             else:
-                line_letters.append(letter)
-        print("  ".join(line_letters))
+                chart += "   "
+        chart += "\n"
+    
+    chart += "    " + "-" * (len(categories) * 3 + 1) + "\n"
+    
+    max_length = max(len(category.name) for category in categories)
+    
+    for i in range(max_length):
+        chart += "     "
+        for category in categories:
+            if i < len(category.name):
+                chart += category.name[i] + "  "
+            else:
+                chart += "   "
+        if i < max_length - 1:
+            chart += "\n"
+    
+    return chart
 
 
 food = Category("Food")
@@ -115,4 +116,5 @@ auto.withdraw(140, "Gas")
 auto.withdraw(40, "Fix")
 
 
-create_spend_chart([food, clothing, auto])
+print(create_spend_chart([food, clothing, auto]))
+print(create_spend_chart([food, clothing]))
