@@ -46,10 +46,6 @@ def arithmetic_arranger(problems, show_answers=False):
             line4.append(str(total).rjust(length))
 
     space_between = "    "
-    # print(space_between.join(line1))
-    # print(space_between.join(line2))
-    # print(space_between.join(line3))
-    # print(space_between.join(line4))
 
     result = (
         space_between.join(line1)
@@ -59,14 +55,10 @@ def arithmetic_arranger(problems, show_answers=False):
         + space_between.join(line3)
     )
 
-    if show_answers:  # print(space_between.join(line1))
-    # print(space_between.join(line2))
-    # print(space_between.join(line3))
-    # print(space_between.join(line4))
+    if show_answers:
         result += "\n" + space_between.join(line4)
-    # print(result)
     problems = result
     return problems
 
 
-print(f'\n{arithmetic_arranger(["32 + 698", "3801 - 2", "45 + 43", "123 + 49"])}')
+print(f'\n{arithmetic_arranger(["32 + 698", "3801 - 2", "45 + 43", "123 + 49"], show_answers=True)}\n')
