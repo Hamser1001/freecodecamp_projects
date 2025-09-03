@@ -1,7 +1,7 @@
 class Rectangle:
-    def __init__(self, height, width):
-        self.height = height
+    def __init__(self, width, height):
         self.width = width
+        self.height = height
 
     def set_width(self, new_width):
         self.width = new_width
@@ -22,31 +22,57 @@ class Rectangle:
         return (self.width**2 + self.height**2) ** 0.5
 
     def get_picture(self):
+        if self.width > 50 or self.height > 50:
+            return "Too big for picture."
         picture = ""
+
         for _ in range(self.height):
             picture += f"{'*' * self.width}\n"
         return picture
+
+    def get_amount_inside(self, other_shape):
+        return (self.width // other_shape.width) * (self.height // other_shape.height)
 
     def __str__(self):
         return f"Rectangle(width={self.width}, height={self.height})"
 
 
 class Square(Rectangle):
-    pass
+    def __init__(self, side):
+        super().__init__(side, side)
+        self.side = side
+
+    def set_side(self, new_side):
+        self.side = new_side
+        self.width = new_side
+        self.height = new_side
+
+    def set_width(self, new_side):
+        self.side = new_side
+        self.width = new_side
+    
+    def set_height(self, new_side):
+        self.side = new_side
+        self.height = new_side
+
+    def __str__(self):
+        return f"Square(side={self.side})"
 
 
 rect = Rectangle(10, 5)
-print(rect)
 print(rect.get_area())
 rect.set_height(3)
 print(rect.get_perimeter())
 print(rect)
 print(rect.get_picture())
 
+sq = Square(9)
+print(sq.get_area())
+sq.set_side(4)
+print(sq.get_diagonal())
+print(sq)
+print(sq.get_picture())
 
-# 50
-# 26
-# Rectangle(width=10, height=3)
-# **********
-# **********
-# **********
+rect.set_height(8)
+rect.set_width(16)
+print(rect.get_amount_inside(sq))
