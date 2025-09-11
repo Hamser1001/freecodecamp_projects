@@ -23,22 +23,25 @@ class Hat:
 
 
 def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
-    pass
+    probability_successed = 0
+    for _ in range(num_experiments):
+        hat_copy = copy.deepcopy(hat)
+        drawn = hat_copy.draw(num_balls_drawn)
+        success = True
+        for color, count in expected_balls.items():
+            if drawn.count(color) < count:
+                success = False
+                break
+        if success:
+            probability_successed += 1
+    return round(probability_successed / num_experiments, 2)
 
 
-hat = Hat(yellow=4, red=2)
-hat2 = Hat(red=5, orange=4, black=1, blue=0, pink=2, yellow=9)
-
-print(hat.contents)
-print(hat2.contents)
-
-
-# print(hat)
-print(f"the results: {hat2.draw(200)}")
-
+hat = Hat(black=6, red=4, green=3)
 probability = experiment(
     hat=hat,
     expected_balls={"red": 2, "green": 1},
     num_balls_drawn=5,
     num_experiments=2000,
 )
+print(probability)
