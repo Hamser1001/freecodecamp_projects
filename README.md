@@ -15,4 +15,3 @@ During the course, I gained experience in:
 
 ---
 
-
