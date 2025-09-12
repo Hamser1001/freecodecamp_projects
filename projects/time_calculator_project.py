@@ -79,6 +79,5 @@ def add_time(start, duration, day=""):
         new_time = f"{new_hour}:{new_minutes:02d} {period}, {day}{days_text}"
     else:
         new_time = f"{new_hour}:{new_minutes:02d} {period} {days_text}"
-
     return new_time
 
